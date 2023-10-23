@@ -1,61 +1,64 @@
-class EventSimulationList:
-    def __init__(self, status):
+import random
+from customer import *
 
-        pass
+class CustomerEvent:
+    def __init__(self, arrivalRate = 1):
+        self.event = None
+        self.arrivalRate = arrivalRate
+        self.eventList = []
+    # def generate(self, customerNum):
+    #     if customerNum < 1:
+    #         return
+    #     self.eventList = [Customer(0)]   
+    #     for i in range(self.customerNum + 1):
+    #         # Generate a new customer arrival time
+    #         arrivalTime = int(random.expovariate(1/self.arrivalRate)*60)
+    #         # Create a new customer
+    #         self.eventList.append(Customer(arrivalTime + self.eventList[i].arrivalTime, CustomerStatus.ARRIVAL))
     
-    def addEvent(self, event):
-        pass
+    
+    #Generate a list of customers with a given number of customers        
+    def numGenerate(self, customerNum, arrivalTime = 0):
+        if customerNum < 1:
+            return
+        self.eventList.append(Customer(arrivalTime))   
+        for i in range(customerNum + 1):
+            # Generate a new customer arrival time
+            arrivalTime = int(random.expovariate(1/self.arrivalRate)*60)
+            # Create a new customer
+            self.eventList.append(Customer(arrivalTime + self.eventList[i].arrivalTime, CustomerStatus.ARRIVAL))
+
+    #Generate a list of customers with a given simulation time
+    def timeGenerate(self, simulationTime, arrivalTime = 0):
+        self.eventList.append(Customer(arrivalTime))
+        while True:
+            # Create a new customer
+            if (self.eventList[-1].arrivalTime < simulationTime):
+                arrivalTime = int(random.expovariate(1/self.arrivalRate)*60)
+                self.eventList.append(Customer(arrivalTime + self.eventList[-1].arrivalTime, CustomerStatus.ARRIVAL))
+            else:
+                break
+                
+    def addCustomerEvent(self, event):
+        if len(self.eventList) == 0:
+            self.eventList.append(event)
+        else:        
+            i = 0
+            for i in range(len(self.eventList)+1):
+                if len(self.eventList) == i:
+                    break
+                if self.eventList[i].arrivalTime > event.arrivalTime:
+                    break
+            
+            self.eventList.insert(i, event)
     
     def printList(self):
-        print('+------------+------------+------------+')
-        print('| Arrival | Service | Event       |')
-        print('+------------+------------+------------+')
-        for customer in self.list:
-            print('| {} | {} | {} |'.format(customer.arrivalTime, customer.serviceTime, customer.event))
-        print('+------------+------------+------------+')
+        print('\n=======printList======')
+        for i in range(len(self.eventList)):
+            print('\narrival=', self.eventList[i].arrivalTime, 'event=', self.eventList[i].CustomerStatus)
+        
+        
+        
 
 
 # We will simulate the system for a given time period. The system will have 3 queues (entrances, food, drink), each with its own arrival rate, service rate, and capacity.
-
-class QueueSimulation:
-    def __init__(self, simulation_time, lambda1, mu1, k1, c1, lambda2, mu2, k2, c2, lambda3, mu3, k3, c3, drinkRatio, simTime):
-        self.avgWaitTime = 0
-        self.avgWaitQuTime = 0
-        self.avgWaitLen = 0
-        self.avgWaitQuLen = 0
-		# self.eventList = EventSimulationList(lam, mu, n)
-        self.currentTime = 0
-        self.waitTimeAcc = 0
-        self.waitQuTimeAcc = 0
-        self.waitLenAcc = 0
-        self.waitQuLenAcc = 0
-        self.completedNum = 0
-        self.servingNum = 0
-        self.previousTime = 0
-    
-    def stats(self):
-        print('Simulation Results:')
-        print('Average wait time:', self.avgWaitTime)
-        print('Average wait queue time:', self.avgWaitQuTime)
-        print('Average wait length:', self.avgWaitLen)
-        print('Average wait queue length:', self.avgWaitQuLen)
-        pass
-    
-    def stats(self):
-        pass
-     
-    def run(self):
-        # Execute system simulation until simulation time is reached.
-        # Implement the simulation logic here.
-        #
-        # 1. Generate a random number to determine the next event.
-        # 2. If the next event is an arrival, generate the next arrival time and add the customer to the queue.
-        # 3. If the next event is a departure, generate the next departure time and remove the customer from the queue.
-        # 4. Update the system state and statistics.
-        # 5. Repeat until simulation time is reached.
-        # Generate stats for simulation
-        self.avgWaitTime = self.waitTimeAcc/self.completedNum
-        self.avgWaitQuTime = self.waitQuTimeAcc/self.completedNum
-        self.avgWaitLen = (self.waitLenAcc/self.currentTime)
-        self.avgWaitQuLen = (self.waitQuLenAcc/self.currentTime)
-        pass
