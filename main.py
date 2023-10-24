@@ -8,15 +8,15 @@ from threading import Thread
 
 if __name__ == '__main__':
     totalServedCustomers = 0
-    EntranceCustomerEvent = CustomerEvent(0.5)
-    FoodCustomerEvent = CustomerEvent(0.5)
+    entranceCustomerEvent = CustomerEvent(0.5)
+    foodCustomerEvent = CustomerEvent(0.5)
     drinkCustomerEvent = CustomerEvent(0.5)
 
-    customerEvent.timeGenerate(simulationTime = 1000, arrivalTime = 0)
+    entranceCustomerEvent.timeGenerate(simulationTime = 1000, arrivalTime = 0)
     
-    drinkMMCK = MMCKQueue("drink_queue",0.5, 10, 100)
-    foodMMCK = MMCKQueue("food_queue",0.5, 10, 100)
-    entranceMMCK= MMCKQueue("entrance_queue",0.4, 5, 100, customerEvent, nextQueueList = [ foodMMCK, drinkMMCK], queueRatio = [1, 1])
+    drinkMMCK = MMCKQueue("drink_queue",0.5, 10, 100, drinkCustomerEvent)
+    foodMMCK = MMCKQueue("food_queue",0.5, 10, 100, foodCustomerEvent)
+    entranceMMCK= MMCKQueue("entrance_queue",0.4, 5, 100, entranceCustomerEvent, nextQueueList = [ foodMMCK, drinkMMCK], queueRatio = [1, 1])
     
     threads     = [None, None, None]
     threads[0]  = Thread(target=entranceMMCK.run)

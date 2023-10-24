@@ -16,7 +16,7 @@ class MMCKQueue:
         service_rate,
         serverNum,
         capacity,
-        customerEventSim=S,
+        customerEventSim,
         nextQueueList=None,
         queueRatio=None,
     ):
